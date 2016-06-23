@@ -79,6 +79,8 @@
 	
 	    return _this;
 	  }
+	  //get the item from the form and add it to an array (this.state.itemArr).
+	
 	
 	  _createClass(Container, [{
 	    key: 'onButtonClick',
@@ -101,7 +103,7 @@
 	        _react2.default.createElement(InputWithButton, { ref: 'inputForm',
 	          onClick: this.onButtonClick
 	        }),
-	        _react2.default.createElement(List, null)
+	        _react2.default.createElement(List, { ref: 'itemList', items: this.state.itemArr })
 	      );
 	    }
 	  }]);
@@ -153,16 +155,36 @@
 	  _createClass(List, [{
 	    key: 'render',
 	    value: function render() {
+	      var items = this.props.items.map(function (item, index) {
+	        return _react2.default.createElement(
+	          'li',
+	          { key: index },
+	          item
+	        );
+	      });
 	      return _react2.default.createElement(
 	        'div',
 	        { className: 'list__wrapper' },
-	        _react2.default.createElement('ul', { className: 'list' })
+	        _react2.default.createElement(
+	          'h1',
+	          { className: 'list__title' },
+	          this.props.listTitle
+	        ),
+	        _react2.default.createElement(
+	          'ul',
+	          { className: 'list', ref: function (element) {
+	              this.itemList = element;
+	            }.bind(this) },
+	          items
+	        )
 	      );
 	    }
 	  }]);
 	
 	  return List;
 	}(_react2.default.Component);
+	
+	List.defaultProps = { listTitle: 'My List' };
 	
 	document.addEventListener('DOMContentLoaded', function () {
 	  _reactDom2.default.render(_react2.default.createElement(Container, null), document.getElementById('app'));

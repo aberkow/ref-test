@@ -10,6 +10,7 @@ class Container extends React.Component {
     this.onButtonClick = this.onButtonClick.bind(this);
 
   }
+  //get the item from the form and add it to an array (this.state.itemArr).
   onButtonClick(evt){
     evt.preventDefault();
     var form = ReactDOM.findDOMNode(this.refs.inputForm.textInput);
@@ -19,7 +20,6 @@ class Container extends React.Component {
     this.setState({itemArr: updatedArr});
     console.log(this.state.itemArr, 'from onButtonClick');
   }
-
   render(){
     console.log(this.state, 'from container');
     return(
@@ -27,7 +27,7 @@ class Container extends React.Component {
         <InputWithButton ref='inputForm'
           onClick={this.onButtonClick}
            />
-        <List />
+         <List ref='itemList' items={this.state.itemArr} />
       </div>
     );
   }
@@ -58,15 +58,23 @@ class List extends React.Component {
     super();
   }
   render(){
+    var items = this.props.items.map(function(item, index){
+      return <li key={index}>{item}</li>;
+    });
     return(
       <div className='list__wrapper'>
-        <ul className='list'>
-
+        <h1 className='list__title'>{this.props.listTitle}</h1>
+        <ul className='list' ref={function(element){
+            this.itemList = element;
+          }.bind(this)}>
+          {items}
         </ul>
       </div>
     );
   }
 }
+
+List.defaultProps = { listTitle: 'My List' }
 
 document.addEventListener('DOMContentLoaded', function(){
   ReactDOM.render(<Container />, document.getElementById('app'));
